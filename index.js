@@ -8,27 +8,27 @@ inquirer
     name: "username"
   })
   .then(function({ username }) {
-    const queryUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
+    const queryUrl = `https://api.github.com/users/${username}`;
 
     axios.get(queryUrl).then(function(res) {
-      const repoNames = res.data.map(function(repo) {
-        return repo.name;
-      });
-      const repoNamesStr = repoNames.join("\n");
+      const profilePicUrl = res.data.avatar_url;
+      console.log(profilePicUrl);
+      
+      
 
-      fs.writeFile("READMEtest.md", repoNamesStr, function(err) {
+      fs.appendFile("READMEtest.md", `![profile avatar](${profilePicUrl})`, function(err) {
         if (err) {
           throw err;
         }
 
-        console.log(`Saved ${repoNames.length} repos`);
+        console.log(`Saved ${profilePicUrl} as an image url`);
       });
     });
   });
-const questions = [];
+// const questions = [];
 
-function writeToFile(fileName, data) {}
+// function writeToFile(fileName, data) {}
 
-function init() {}
+// function init() {}
 
-init();
+// init();
