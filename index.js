@@ -1,12 +1,34 @@
-const questions = [
+const fs = require("fs");
+const axios = require("axios");
+const inquirer = require("inquirer");
 
-];
+inquirer
+  .prompt({
+    message: "Enter your GitHub username:",
+    name: "username"
+  })
+  .then(function({ username }) {
+    const queryUrl = `https://api.github.com/users/${username}`;
 
-function writeToFile(fileName, data) {
-}
+    axios.get(queryUrl).then(function(res) {
+      const profilePicUrl = res.data.avatar_url;
+      console.log(profilePicUrl);
+      
+      
 
-function init() {
+      fs.appendFile("READMEtest.md", `![profile avatar](${profilePicUrl})`, function(err) {
+        if (err) {
+          throw err;
+        }
 
-}
+        console.log(`Saved ${profilePicUrl} as an image url`);
+      });
+    });
+  });
+// const questions = [];
 
-init();
+// function writeToFile(fileName, data) {}
+
+// function init() {}
+
+// init();
