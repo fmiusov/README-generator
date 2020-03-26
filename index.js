@@ -4,27 +4,52 @@ const inquirer = require("inquirer");
 
 inquirer
   .prompt({
-    message: "Enter your GitHub username:",
-    name: "username"
+    type: "input",
+    message: "What is your project title?",
+    name: "title"
   })
-  .then(function({ username }) {
-    const queryUrl = `https://api.github.com/users/${username}`;
-
-    axios.get(queryUrl).then(function(res) {
-      const profilePicUrl = res.data.avatar_url;
-      console.log(profilePicUrl);
-      
-      
-
-      fs.appendFile("READMEtest.md", `![profile avatar](${profilePicUrl})`, function(err) {
-        if (err) {
-          throw err;
-        }
-
-        console.log(`Saved ${profilePicUrl} as an image url`);
-      });
+  .then(function({ title }) {
+    fs.appendFile("READMEtest.md", `#Project Title: ${title}\n`, function(err) {
+      if (err) {
+        throw err;
+      }
     });
+  })
+  .then(function() {
+    inquirer
+      .prompt({
+        message: "Enter your GitHub username:",
+        name: "username"
+      })
+      .then(function({ username }) {
+        const queryUrl = `https://api.github.com/users/${username}`;
+        const queryEmailUrl = `https://api.github.com/users/${username}/events/public`;
+        axios.get(queryUrl).then(function(res) {
+          fs.appendFile(
+            "READMEtest.md",
+            `![profile avatar](${res.data.avatar_url})\n`,
+            function(err) {
+              if (err) {
+                throw err;
+              }
+            }
+          );
+        });
+        axios.get(queryEmailUrl).then(function(pushinfo) {
+          fs.appendFile(
+            "READMEtest.md",
+            //most people do not have their email set to a public profile, this is a sneakier way of getting it
+            `Email me at: ${pushinfo.data[0].payload.commits[0].author.email}\n`,
+            function(err) {
+              if (err) {
+                throw err;
+              }
+            }
+          );
+        });
+      });
   });
+
 // const questions = [];
 
 // function writeToFile(fileName, data) {}
