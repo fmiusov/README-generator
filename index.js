@@ -14,20 +14,8 @@ inquirer
         throw err;
       }
     });
-  }).then(function() {
-    inquirer
-      .prompt({
-        type: "input",
-        message: "What is your project description?",
-        name: "description"
-      }).then(function({ description }) {
-          fs.appendFile("READMEtest.md", `Description: ${description}\n`, function(err) {
-              if (err) {
-                  throw err;
-              }
-          });
-      })
-      .then(function() {
+  })
+  .then(function() {
     inquirer
       .prompt({
         message: "Enter your GitHub username:",
