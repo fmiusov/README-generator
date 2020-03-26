@@ -24,18 +24,16 @@ function init() {
     .then(function(answer) {
       fs.writeFile(
         "READMETEST.md",
-        `# Project Title: ${answer.title}\n\n## Description: ${answer.description}\n\n## Table of Contents  
+        `# Project Title: ${answer.title}\n\n![Generic badge](https://img.shields.io/badge/License-${answer.license}-<COLOR>.svg)\n\n## Description: ${answer.description}\n\n## Table of Contents  
     1. Installation
     
     2. Usage
+        
+    3. Contributing
     
-    3. License - ${answer.license}
+    4. Tests
     
-    4. Contributing
-    
-    5. Tests
-    
-    6. GitHub Info:\n\n `,
+    5. GitHub Info:\n\n `,
         function(err) {
           if (err) {
             return console.log(err);
@@ -56,7 +54,7 @@ function init() {
           axios.get(queryUrl).then(function(res) {
             fs.appendFile(
               "READMETEST.md",
-              `\n![profile avatar](${res.data.avatar_url})\n`,
+              `\n![profile avatar](${res.data.avatar_url})\n\n`,
               function(err) {
                 if (err) {
                   throw err;
@@ -68,7 +66,7 @@ function init() {
             fs.appendFile(
               "READMEtest.md",
               //sniffing out the email address from their most recent public push payload
-              `Email me at: ${pushinfo.data[0].payload.commits[0].author.email}\n\n`,
+              `## Email me at: ${pushinfo.data[0].payload.commits[0].author.email}\n\n`,
               function(err) {
                 if (err) {
                   throw err;
